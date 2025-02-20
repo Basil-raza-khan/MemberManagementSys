@@ -14,7 +14,7 @@ const MemberCard = ({ member, onEdit, onDelete }) => {
       <div className="flex space-x-4">
         <button
           onClick={() => onEdit(member.id)}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-green-100 transition duration-900"
+          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition duration-900"
         >
           Edit
         </button>
