@@ -18,6 +18,11 @@ const MemberForm = ({ post, onSubmit, onCancel }) => {
     onSubmit(formData);
   };
 
+  const handleCancel = () => {
+    setShowForm(false); // Assuming you're controlling visibility
+  };
+  
+
   return (
     <div className="bg-white p-6 rounded-lg shadow-md space-y-4">
       <h2 className="text-xl font-bold">{post ? 'Edit Post' : 'Add Post'}</h2>
