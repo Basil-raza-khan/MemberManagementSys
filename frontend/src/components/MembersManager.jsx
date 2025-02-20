@@ -10,24 +10,20 @@ const MembersManager = () => {
   const [deletePostId, setDeletePostId] = useState(null);
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await fetch("http://localhost:4000/getData", {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Failed to fetch posts");
-        }
-        const data = await response.json();
-        setPosts(data);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      }
-    };
     fetchPosts();
   }, []);
+
+  const fetchPosts = async () => {
+    try {
+      const response = await fetch("http://localhost:4000/getData");
+      if (!response.ok) throw new Error("Failed to fetch posts");
+
+      const data = await response.json();
+      setPosts(data);
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    }
+  };
 
   const handleAddPost = async (formData) => {
     try {
@@ -36,9 +32,9 @@ const MembersManager = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      if (!response.ok) {
-        throw new Error("Failed to add post");
-      }
+
+      if (!response.ok) throw new Error("Failed to add post");
+
       const newPost = await response.json();
       setPosts((prevPosts) => [...prevPosts, newPost.newPost]);
       setShowForm(false);
@@ -48,18 +44,21 @@ const MembersManager = () => {
   };
 
   const handleEditPost = async (formData) => {
+    if (!editingPost) return;
+
     try {
       const response = await fetch(`http://localhost:4000/updateSpecificData/${editingPost.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      if (!response.ok) {
-        throw new Error("Failed to update post");
-      }
-      const updatedPost = await response.json();
-      setPosts((prevPosts) => prevPosts.map((post) => (post.id === editingPost.id ? updatedPost.updatedArray : post)));
+
+      if (!response.ok) throw new Error("Failed to update post");
+
+      const updatedData = await response.json();
+      setPosts((prevPosts) => prevPosts.map((post) => (post.id === editingPost.id ? updatedData.updatedPost : post)));
       setShowForm(false);
+      setEditingPost(null);
     } catch (error) {
       console.error("Error updating post:", error);
     }
@@ -67,13 +66,11 @@ const MembersManager = () => {
 
   const confirmDeletePost = async () => {
     if (!deletePostId) return;
+
     try {
-      const response = await fetch(`http://localhost:4000/deleteData/${deletePostId}`, {
-        method: "DELETE",
-      });
-      if (!response.ok) {
-        throw new Error("Failed to delete post");
-      }
+      const response = await fetch(`http://localhost:4000/deleteData/${deletePostId}`, { method: "DELETE" });
+      if (!response.ok) throw new Error("Failed to delete post");
+
       setPosts((prevPosts) => prevPosts.filter((post) => post.id !== deletePostId));
       setDeletePostId(null);
     } catch (error) {
@@ -87,40 +84,20 @@ const MembersManager = () => {
     setShowForm(true);
   };
 
-  const handleCancel = () => {
-    setShowForm(false);
-    setEditingPost(null);
-  };
-
   return (
-    <div className="flex flex-col items-center justify-center w-full">
+    <div className="flex flex-col items-center w-full">
       <div className="w-full max-w-4xl">
         {showForm ? (
-          <MemberForm post={editingPost} onSubmit={editingPost ? handleEditPost : handleAddPost} onCancel={handleCancel} />
+          <MemberForm post={editingPost} onSubmit={editingPost ? handleEditPost : handleAddPost} />
         ) : (
           <>
-            <button onClick={() => setShowForm(true)} className="bg-green-500 text-white px-6 py-2 rounded-md mb-6 hover:bg-green-600 transition duration-300">
+            <button onClick={() => setShowForm(true)} className="bg-green-500 text-white px-6 py-2 rounded-md mb-6">
               Add Post
             </button>
-            <MembersList posts={posts} onEdit={handleEdit} onDelete={(id) => setDeletePostId(id)} />
+            <MembersList posts={posts} onEdit={handleEdit} onDelete={setDeletePostId} />
           </>
         )}
       </div>
-
-      <AlertDialog open={!!deletePostId} onOpenChange={(open) => !open && setDeletePostId(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>This action cannot be undone. This will permanently delete the post.</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDeletePost} className="bg-red-500 hover:bg-red-600">
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 };
