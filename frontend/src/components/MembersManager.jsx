@@ -68,7 +68,10 @@ const MembersManager = () => {
     if (!deletePostId) return;
 
     try {
-      const response = await fetch(`http://localhost:4000/deleteData/${deletePostId}`, { method: "DELETE" });
+      const response = await fetch(`http://localhost:4000/deleteData/${deletePostId}`, {
+        method: "DELETE"
+      });
+
       if (!response.ok) throw new Error("Failed to delete post");
 
       setPosts((prevPosts) => prevPosts.filter((post) => post.id !== deletePostId));
@@ -94,7 +97,11 @@ const MembersManager = () => {
             <button onClick={() => setShowForm(true)} className="bg-green-500 text-white px-6 py-2 rounded-md mb-6">
               Add Post
             </button>
-            <MembersList posts={posts} onEdit={handleEdit} onDelete={setDeletePostId} />
+            <MembersList posts={posts} onEdit={handleEdit} onDelete={(id) => {
+              setDeletePostId(id);
+              confirmDeletePost();
+            }} />
+
           </>
         )}
       </div>
