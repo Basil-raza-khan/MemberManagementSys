@@ -1,4 +1,4 @@
-// components/MemberForm.jsx
+
 import React, { useState } from 'react';
 
 const MemberForm = ({ post, onSubmit, onCancel }) => {

@@ -6,7 +6,7 @@ const StarsBackground = () => {
   return (
     <div className="absolute inset-0 z-0">
       <Canvas>
-        <Stars radius={100} count={3000} factor={5} fade speed={5} />
+        <Stars radius={100} count={3000} factor={5} fade speed={4} />
       </Canvas>
     </div>
   );

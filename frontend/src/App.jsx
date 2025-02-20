@@ -1,7 +1,7 @@
 import React from "react";
 import Banner from "./components/Banner";
 import MembersManager from "./components/MembersManager";
-import StarsBackground from "./components/StarsBackground"; // Import Stars Background
+import StarsBackground from "./components/StarsBackground"; 
 
 function App() {
   const handleButtonClick = () => {
@@ -10,10 +10,9 @@ function App() {
 
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen bg-gray-950 p-8">
-      {/* Blinking Stars Background */}
+     
       <StarsBackground />
 
-      {/* Content */}
       <div className="relative z-10">
         <Banner
           title="Welcome to Our Website"

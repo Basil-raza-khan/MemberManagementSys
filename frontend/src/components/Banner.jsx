@@ -1,4 +1,4 @@
-// components/Banner.jsx
+
 import React from 'react';
 
 const Banner = ({ title, description, buttonText, onButtonClick }) => {

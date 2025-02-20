@@ -1,14 +1,13 @@
 import express from "express";
 import bodyParser from "body-parser";
-import cors from "cors"; // Add this line
+import cors from "cors"; 
 
 const app = express();
 const portno = 4000;
 const currentTime = new Date();
-// console.log(currentTime);
 
-app.use(cors()); // Add this line
-app.use(bodyParser.json()); // Add this to parse JSON bodies
+app.use(cors()); 
+app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -47,17 +46,19 @@ app.get("/getData",(req,res)=>{
     res.send(posts)
 })
 
+
 app.post('/addData', (req, res) => {
   const newPost = {
     id: pid + 1,
     title: req.body.title,
     content: req.body.content,
     author: req.body.author,
-    date: currentTime // Fix this line (change "data" to "date")
+    date: currentTime 
   };
   posts.push(newPost);
   res.send({ message: "successfully added", newPost });
 });
+
 
 app.put('/updateData/:Data_id', (req, res) => {
   let pid = parseInt(req.params.Data_id);
@@ -76,6 +77,7 @@ app.put('/updateData/:Data_id', (req, res) => {
     res.send("id not found");
   }
 });
+
 
 app.patch("/updateSpecificData/:Data_id",(req,res)=>{
   let pid = parseInt(req.params.Data_id);
