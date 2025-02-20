@@ -49,8 +49,8 @@ const MembersManager = () => {
 
   const handleEditPost = async (formData) => {
     try {
-      const response = await fetch(`http://localhost:4000/updateData/${editingPost.id}`, {
-        method: "PUT",
+      const response = await fetch(`http://localhost:4000/updateSpecificData/${editingPost.id}`, {
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
@@ -58,7 +58,7 @@ const MembersManager = () => {
         throw new Error("Failed to update post");
       }
       const updatedPost = await response.json();
-      setPosts((prevPosts) => prevPosts.map((post) => (post.id === editingPost.id ? updatedPost.updatedPost : post)));
+      setPosts((prevPosts) => prevPosts.map((post) => (post.id === editingPost.id ? updatedPost.updatedArray : post)));
       setShowForm(false);
     } catch (error) {
       console.error("Error updating post:", error);
@@ -96,7 +96,7 @@ const MembersManager = () => {
     <div className="flex flex-col items-center justify-center w-full">
       <div className="w-full max-w-4xl">
         {showForm ? (
-          <MemberForm post={editingPost} onSubmit={handleAddPost} onCancel={handleCancel} />
+          <MemberForm post={editingPost} onSubmit={editingPost ? handleEditPost : handleAddPost} onCancel={handleCancel} />
         ) : (
           <>
             <button onClick={() => setShowForm(true)} className="bg-green-500 text-white px-6 py-2 rounded-md mb-6 hover:bg-green-600 transition duration-300">
@@ -107,7 +107,6 @@ const MembersManager = () => {
         )}
       </div>
 
-      
       <AlertDialog open={!!deletePostId} onOpenChange={(open) => !open && setDeletePostId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>

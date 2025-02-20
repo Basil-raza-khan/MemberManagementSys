@@ -10,8 +10,6 @@ app.use(cors());
 app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(bodyParser.urlencoded({ extended: true }));
-
 let posts = [
     {
       id: 1,
@@ -41,11 +39,9 @@ let posts = [
 
 let pid = posts.length;
 
-
 app.get("/getData",(req,res)=>{
-    res.send(posts)
-})
-
+    res.send(posts);
+});
 
 app.post('/addData', (req, res) => {
   const newPost = {
@@ -56,49 +52,26 @@ app.post('/addData', (req, res) => {
     date: currentTime 
   };
   posts.push(newPost);
+  pid += 1; // Increment the pid
   res.send({ message: "successfully added", newPost });
 });
 
-
-app.put('/updateData/:Data_id', (req, res) => {
-  let pid = parseInt(req.params.Data_id);
-  let targetIndex = posts.findIndex((o) => o.id === pid);
-
-  if (targetIndex !== -1) {
-    posts[targetIndex] = {
-      id: pid, // Fix this line (replace "target" with "pid")
-      title: req.body.title,
-      content: req.body.content,
-      author: req.body.author,
-      date: currentTime
-    };
-    res.send({ message: "successfully updated", updatedPost: posts[targetIndex] });
-  } else {
-    res.send("id not found");
-  }
-});
-
-
 app.patch("/updateSpecificData/:Data_id",(req,res)=>{
   let pid = parseInt(req.params.Data_id);
-  console.log(pid);
-  
-  let targetIndex = posts.findIndex((o)=>{
-    return o.id === pid
-  })
+  let targetIndex = posts.findIndex((o) => o.id === pid);
   
   if(targetIndex === -1){
-    res.send({message:"id doesnot exist"})
+    res.send({message:"id does not exist"});
+    return;
   }
   
   const allowedFields = ['title','content','author'];
-
-  let result = Object.keys(req.body).filter(key => allowedFields.includes(key))
-  if(result.length<=0){
-    res.send({message:"invalid fields"})
+  let result = Object.keys(req.body).filter(key => allowedFields.includes(key));
+  if(result.length <= 0){
+    res.send({message:"invalid fields"});
+    return;
   }
   
-
   if(req.body.title !== undefined){
     posts[targetIndex].title = req.body.title;
   }
@@ -112,30 +85,24 @@ app.patch("/updateSpecificData/:Data_id",(req,res)=>{
   res.send({
     message:"successfully updated the data",
     updatedArray : posts[targetIndex]
-  })
-  
-})
-
+  });
+});
 
 app.delete("/deleteData/:Data_id",(req,res)=>{
   let pid = parseInt(req.params.Data_id);
-  let targetIndex = posts.findIndex((o)=>{
-    return o.id === pid
-  })
+  let targetIndex = posts.findIndex((o) => o.id === pid);
 
   if(targetIndex !== -1){
-    posts.splice(targetIndex,1)
+    posts.splice(targetIndex, 1);
     res.send({
       message:`successfully deleted data from id ${pid}`,
-      updatedData:posts
-      });
-  }else{
-    res.send("id not found")
+      updatedData: posts
+    });
+  } else {
+    res.send("id not found");
   }  
-})
-
-
+});
 
 app.listen(portno,()=>{
   console.log(`server running on port ${portno}`);
-})
+});
