@@ -1,12 +1,12 @@
-// components/MemberCard.jsx
+// components/MemberCard.jsx Limit the content it makes card very big make card with in a fix good looking size so i can scroll the content
 import React from 'react';
 
 const MemberCard = ({ member, onEdit, onDelete }) => {
   return (
-    <div className="bg-gray-200 p-9 rounded-lg hover:bg-indigo-200 shadow-md space-y-4">
-      <h2 className="text-xl font-bold">{member.name}</h2>
-      <p className="text-gray-600">{member.email}</p>
-      <p className="text-gray-600">{member.role}</p>
+    <div className="bg-gray-200 p-6 rounded-lg hover:bg-indigo-200 shadow-md space-y-4">
+      <h2 className="text-xl font-bold">{member.title}</h2>
+      <p className="text-gray-600">{member.content}</p>
+      <p className="text-gray-600">Author: {member.author}</p>
       <div className="flex space-x-4">
         <button
           onClick={() => onEdit(member.id)}

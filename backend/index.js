@@ -1,12 +1,15 @@
 import express from "express";
 import bodyParser from "body-parser";
-
+import cors from "cors"; // Add this line
 
 const app = express();
 const portno = 4000;
 const currentTime = new Date();
 // console.log(currentTime);
 
+app.use(cors()); // Add this line
+app.use(bodyParser.json()); // Add this to parse JSON bodies
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -44,45 +47,35 @@ app.get("/getData",(req,res)=>{
     res.send(posts)
 })
 
-app.post('/addData',(req,res)=>{
+app.post('/addData', (req, res) => {
+  const newPost = {
+    id: pid + 1,
+    title: req.body.title,
+    content: req.body.content,
+    author: req.body.author,
+    date: currentTime // Fix this line (change "data" to "date")
+  };
+  posts.push(newPost);
+  res.send({ message: "successfully added", newPost });
+});
 
-    const newPost = {
-      id:pid+1,
-      title:req.body.title,
-      content:req.body.content,
-      author:req.body.author,
-      data:currentTime
-    }
-    posts.push(newPost)
-    res.send({message:"successfully added",newPost})
-    
-})
-
-app.put('/updateData/:Data_id',(req,res)=>{
-
+app.put('/updateData/:Data_id', (req, res) => {
   let pid = parseInt(req.params.Data_id);
+  let targetIndex = posts.findIndex((o) => o.id === pid);
 
-  let targetIndex = posts.findIndex((o)=>{
-    return o.id === pid
-  })
-
-  if(targetIndex !== -1){
-      posts[targetIndex] = {
-      id:target,
-      title:req.body.title,
-      content:req.body.content,
-      author:req.body.author,
-      date:currentTime
-    }
-
-    res.send({message:"successfully added",updatedPost :posts[targetIndex]})
-
-  }else{
-    res.send("id not found")
+  if (targetIndex !== -1) {
+    posts[targetIndex] = {
+      id: pid, // Fix this line (replace "target" with "pid")
+      title: req.body.title,
+      content: req.body.content,
+      author: req.body.author,
+      date: currentTime
+    };
+    res.send({ message: "successfully updated", updatedPost: posts[targetIndex] });
+  } else {
+    res.send("id not found");
   }
-  
-  
-})
+});
 
 app.patch("/updateSpecificData/:Data_id",(req,res)=>{
   let pid = parseInt(req.params.Data_id);

@@ -1,11 +1,11 @@
 // components/MemberForm.jsx
 import React, { useState } from 'react';
 
-const MemberForm = ({ member, onSubmit, onCancel }) => {
+const MemberForm = ({ post, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
-    name: member ? member.name : '',
-    email: member ? member.email : '',
-    role: member ? member.role : '',
+    title: post ? post.title : '',
+    content: post ? post.content : '',
+    author: post ? post.author : '',
   });
 
   const handleChange = (e) => {
@@ -20,36 +20,35 @@ const MemberForm = ({ member, onSubmit, onCancel }) => {
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md space-y-4">
-      <h2 className="text-xl font-bold">{member ? 'Edit Member' : 'Add Member'}</h2>
+      <h2 className="text-xl font-bold">{post ? 'Edit Post' : 'Add Post'}</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-gray-700">Name</label>
+          <label className="block text-gray-700">Title</label>
           <input
             type="text"
-            name="name"
-            value={formData.name}
+            name="title"
+            value={formData.title}
             onChange={handleChange}
             className="w-full p-2 border rounded-md"
             required
           />
         </div>
         <div>
-          <label className="block text-gray-700">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
+          <label className="block text-gray-700">Content</label>
+          <textarea
+            name="content"
+            value={formData.content}
             onChange={handleChange}
             className="w-full p-2 border rounded-md"
             required
           />
         </div>
         <div>
-          <label className="block text-gray-700">Role</label>
+          <label className="block text-gray-700">Author</label>
           <input
             type="text"
-            name="role"
-            value={formData.role}
+            name="author"
+            value={formData.author}
             onChange={handleChange}
             className="w-full p-2 border rounded-md"
             required
@@ -60,7 +59,7 @@ const MemberForm = ({ member, onSubmit, onCancel }) => {
             type="submit"
             className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300"
           >
-            {member ? 'Update' : 'Add'}
+            {post ? 'Update' : 'Add'}
           </button>
           <button
             type="button"
