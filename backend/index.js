@@ -37,7 +37,7 @@ let posts = [
     },
   ];
 
-  let pid = posts.length;
+let pid = posts.length;
 
 
 app.get("/getData",(req,res)=>{
@@ -75,7 +75,7 @@ app.put('/updateData/:Data_id',(req,res)=>{
       date:currentTime
     }
 
-    res.send(posts[targetIndex])
+    res.send({message:"successfully added",updatedPost :posts[targetIndex]})
 
   }else{
     res.send("id not found")
@@ -84,8 +84,45 @@ app.put('/updateData/:Data_id',(req,res)=>{
   
 })
 
-app.delete("/deleteData/:Data_id",(req,res)=>{
+app.patch("/updateSpecificData/:Data_id",(req,res)=>{
+  let pid = parseInt(req.params.Data_id);
+  console.log(pid);
+  
+  let targetIndex = posts.findIndex((o)=>{
+    return o.id === pid
+  })
+  
+  if(targetIndex === -1){
+    res.send({message:"id doesnot exist"})
+  }
+  
+  const allowedFields = ['title','content','author'];
 
+  let result = Object.keys(req.body).filter(key => allowedFields.includes(key))
+  if(result.length<=0){
+    res.send({message:"invalid fields"})
+  }
+  
+
+  if(req.body.title !== undefined){
+    posts[targetIndex].title = req.body.title;
+  }
+  if(req.body.content !== undefined){
+    posts[targetIndex].content = req.body.content;
+  }
+  if(req.body.author !== undefined){
+    posts[targetIndex].author = req.body.author;
+  }
+
+  res.send({
+    message:"successfully updated the data",
+    updatedArray : posts[targetIndex]
+  })
+  
+})
+
+
+app.delete("/deleteData/:Data_id",(req,res)=>{
   let pid = parseInt(req.params.Data_id);
   let targetIndex = posts.findIndex((o)=>{
     return o.id === pid
