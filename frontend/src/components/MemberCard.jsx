@@ -5,6 +5,10 @@ const MemberCard = ({ member, onEdit, onDelete }) => {
     <div className="bg-gray-200 p-6 rounded-lg hover:bg-green-100  shadow-md space-y-4 flex flex-col h-96">
       <h2 className="text-xl font-bold">{member.title}</h2>
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> origin/main
       <div className="overflow-y-auto flex-grow custom-scrollbar">
         <p className="text-gray-600">{member.content}</p>
       </div>

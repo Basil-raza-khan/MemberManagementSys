@@ -71,7 +71,10 @@ app.patch("/updateSpecificData/:Data_id", async (req, res) => {
 });
 
 // Delete a specific post
+<<<<<<< HEAD
+=======
 // Delete a post
+>>>>>>> origin/main
 app.delete("/deleteData/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
