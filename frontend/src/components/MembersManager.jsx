@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from "react";
 import MembersList from "./MembersList";
 import MemberForm from "./MemberForm";
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
 
 const MembersManager = () => {
   const [posts, setPosts] = useState([]);
@@ -47,16 +57,23 @@ const MembersManager = () => {
     if (!editingPost) return;
 
     try {
-      const response = await fetch(`http://localhost:4000/updateSpecificData/${editingPost.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        `http://localhost:4000/updateSpecificData/${editingPost.id}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (!response.ok) throw new Error("Failed to update post");
 
       const updatedData = await response.json();
-      setPosts((prevPosts) => prevPosts.map((post) => (post.id === editingPost.id ? updatedData.updatedPost : post)));
+      setPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post.id === editingPost.id ? updatedData.updatedPost : post
+        )
+      );
       setShowForm(false);
       setEditingPost(null);
     } catch (error) {
@@ -68,14 +85,23 @@ const MembersManager = () => {
     if (!deletePostId) return;
 
     try {
+<<<<<<< HEAD
       const response = await fetch(`http://localhost:4000/deleteData/${deletePostId}`, {
         method: "DELETE"
       });
 
+=======
+      const response = await fetch(
+        `http://localhost:4000/deleteData/${deletePostId}`,
+        { method: "DELETE" }
+      );
+>>>>>>> origin/main
       if (!response.ok) throw new Error("Failed to delete post");
 
-      setPosts((prevPosts) => prevPosts.filter((post) => post.id !== deletePostId));
-      setDeletePostId(null);
+      setPosts((prevPosts) =>
+        prevPosts.filter((post) => post.id !== deletePostId)
+      );
+      setDeletePostId(null); // Reset delete ID after deletion
     } catch (error) {
       console.error("Error deleting post:", error);
     }
@@ -91,18 +117,55 @@ const MembersManager = () => {
     <div className="flex flex-col items-center w-full">
       <div className="w-full max-w-4xl">
         {showForm ? (
-          <MemberForm post={editingPost} onSubmit={editingPost ? handleEditPost : handleAddPost} />
+          <MemberForm
+            post={editingPost}
+            onSubmit={editingPost ? handleEditPost : handleAddPost}
+            onCancel={() => setShowForm(false)} // Fix cancel button
+          />
         ) : (
           <>
-            <button onClick={() => setShowForm(true)} className="bg-green-500 text-white px-6 py-2 rounded-md mb-6">
+            <button
+              onClick={() => setShowForm(true)}
+              className="bg-green-500 text-white px-6 py-2 rounded-md mb-6"
+            >
               Add Post
             </button>
+<<<<<<< HEAD
             <MembersList posts={posts} onEdit={handleEdit} onDelete={(id) => {
               setDeletePostId(id);
               confirmDeletePost();
             }} />
 
+=======
+            <MembersList
+              posts={posts}
+              onEdit={handleEdit}
+              onDelete={(id) => setDeletePostId(id)} // Set delete ID only
+            />
+>>>>>>> origin/main
           </>
+        )}
+
+        {/* Alert Dialog for Delete Confirmation */}
+        {deletePostId && (
+          <AlertDialog open={true} onOpenChange={() => setDeletePostId(null)}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. The post will be permanently deleted.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel onClick={() => setDeletePostId(null)}>
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction onClick={confirmDeletePost} className="bg-red-500 hover:bg-red-900">
+                  Confirm Delete
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         )}
       </div>
     </div>

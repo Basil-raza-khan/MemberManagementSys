@@ -71,6 +71,10 @@ app.patch("/updateSpecificData/:Data_id", async (req, res) => {
 });
 
 // Delete a specific post
+<<<<<<< HEAD
+=======
+// Delete a post
+>>>>>>> origin/main
 app.delete("/deleteData/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -85,6 +89,7 @@ app.delete("/deleteData/:id", async (req, res) => {
     res.status(500).json({ error: "Failed to delete post" });
   }
 });
+
 
 app.listen(portno, () => {
   console.log(`Server running on port ${portno}`);
