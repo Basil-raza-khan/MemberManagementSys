@@ -85,17 +85,10 @@ const MembersManager = () => {
     if (!deletePostId) return;
 
     try {
-<<<<<<< HEAD
-      const response = await fetch(`http://localhost:4000/deleteData/${deletePostId}`, {
-        method: "DELETE"
-      });
-
-=======
       const response = await fetch(
         `http://localhost:4000/deleteData/${deletePostId}`,
         { method: "DELETE" }
       );
->>>>>>> origin/main
       if (!response.ok) throw new Error("Failed to delete post");
 
       setPosts((prevPosts) =>
@@ -130,19 +123,11 @@ const MembersManager = () => {
             >
               Add Post
             </button>
-<<<<<<< HEAD
-            <MembersList posts={posts} onEdit={handleEdit} onDelete={(id) => {
-              setDeletePostId(id);
-              confirmDeletePost();
-            }} />
-
-=======
             <MembersList
               posts={posts}
               onEdit={handleEdit}
               onDelete={(id) => setDeletePostId(id)} // Set delete ID only
             />
->>>>>>> origin/main
           </>
         )}
 

@@ -6,14 +6,16 @@ import cors from "cors";
 const db = new pg.Client({
   user: "postgres",
   host: "localhost",
-  database: "NoteApp",
-  password: "Mhisham2016",
-  port: 5432,
+  database: "postgres",
+  password: "helloworld",
+  port: 5431,
 });
 
 db.connect()
   .then(() => console.log("Connected to PostgreSQL database"))
-  .catch((err) => console.error("Error connecting to PostgreSQL database", err));
+  .catch((err) =>
+    console.error("Error connecting to PostgreSQL database", err)
+  );
 
 const app = express();
 const portno = 4000;
@@ -43,7 +45,9 @@ app.post("/addData", async (req, res) => {
        RETURNING *`,
       [title, content, author, currentTime]
     );
-    res.status(201).json({ message: "Successfully added", newPost: result.rows[0] });
+    res
+      .status(201)
+      .json({ message: "Successfully added", newPost: result.rows[0] });
   } catch (error) {
     res.status(500).json({ error: "Failed to add post" });
   }
@@ -71,25 +75,29 @@ app.patch("/updateSpecificData/:Data_id", async (req, res) => {
 });
 
 // Delete a specific post
-<<<<<<< HEAD
-=======
-// Delete a post
->>>>>>> origin/main
+// <<<<<<< HEAD
+// // Delete a post
+// >>>>>>> origin/main
 app.delete("/deleteData/:id", async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const result = await db.query("DELETE FROM notedata WHERE id = $1 RETURNING *", [id]);
+    const result = await db.query(
+      "DELETE FROM notedata WHERE id = $1 RETURNING *",
+      [id]
+    );
 
     if (result.rowCount === 0) {
       return res.status(404).json({ error: "Post not found" });
     }
 
-    res.json({ message: "Post deleted successfully", deletedPost: result.rows[0] });
+    res.json({
+      message: "Post deleted successfully",
+      deletedPost: result.rows[0],
+    });
   } catch (error) {
     res.status(500).json({ error: "Failed to delete post" });
   }
 });
-
 
 app.listen(portno, () => {
   console.log(`Server running on port ${portno}`);
