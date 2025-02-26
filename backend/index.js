@@ -5,10 +5,10 @@ import cors from "cors";
 
 const db = new pg.Client({
   user: "postgres",
-  host: "localhost",
+  host: "postgres",
   database: "postgres",
   password: "helloworld",
-  port: 5431,
+  port: 5432,
 });
 
 db.connect()
@@ -41,8 +41,8 @@ app.post("/addData", async (req, res) => {
     const { title, content, author } = req.body;
     const result = await db.query(
       `INSERT INTO notedata (title, content, author, date) 
-       VALUES ($1, $2, $3, $4) 
-       RETURNING *`,
+        VALUES ($1, $2, $3, $4) 
+        RETURNING *`,
       [title, content, author, currentTime]
     );
     res

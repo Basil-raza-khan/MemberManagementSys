@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  postgres:
+    container_name: testingpostgres
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: helloworld
+      POSTGRES_DB: postgres
+    ports:
+      - "5431:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: nodeapp
+    ports:
+      - "4000:4000"
+    depends_on:
+      - postgres
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: helloworld
+      POSTGRES_DB: postgres
+
+  frontend:
+    build: ../frontend
+    container_name: reactapp
+    ports:
+      - "5173:5173"
+    depends_on:
+      - app
+    command: ["npm", "run", "dev", "--", "--host"]
+
+volumes:
+  postgres_data:
